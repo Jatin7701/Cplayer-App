@@ -1,0 +1,41 @@
+docker pull mysql:5
+
+docker pull mongo
+
+docker pull royalhermit/cplayer-eureka
+
+docker pull royalhermit/cplayer-userauth
+
+docker pull royalhermit/cplayer-user
+
+docker pull royalhermit/cplayer-favourites
+
+docker pull royalhermit/cplayer-recommended
+
+docker pull royalhermit/cplayer-gateway
+
+docker pull royalhermit/cplayer-spa
+
+
+
+
+
+docker network create cplayer --driver bridge
+
+docker run -d -p 27017:27017 -v ~/mongo:/data/db  --name cplayer-mongo --network cplayer mongo:latest
+
+docker run --name mysql-cplayer -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=cplayer -e MYSQL_USER=ca -e MYSQL_PASSWORD=password --network cplayer -d mysql:5
+
+docker run -d --name cplayer-user --network cplayer royalhermit/cplayer-user
+
+docker run -d --name cplayer-auth --network cplayer royalhermit/cplayer-userauth
+
+docker run -d --name cplayer-favourites --network cplayer royalhermit/cplayer-favourites
+
+docker run -d --name cplayer-recommended --network cplayer royalhermit/cplayer-recommended
+
+docker run -d -p 8888:8888 --name cplayer-gateway --network cplayer royalhermit/cplayer-gateway
+
+docker run -d -p 4200:4200 --name cplayer-spa --network cplayer royalhermit/cplayer-spa
+
+

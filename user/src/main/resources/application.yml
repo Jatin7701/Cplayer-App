@@ -1,0 +1,27 @@
+server:
+  port: '8082'
+  
+eureka:
+  client:
+    serviceURL:
+#      defaultZone: http://cplayer-eureka:8761/eureka
+        defaultZone : http://localhost:8761/eureka/
+  
+jwt:
+  secret: secret
+spring:
+  data:
+    mongodb:
+      database: cplayer2
+      port: 27017
+#      uri: mongodb://cplayer-mongo:27017/cplayer2
+  uri: mongodb://localhost:27017/cplayer2
+  jpa:
+    hibernate:
+      ddl-auto: update
+  application:
+    name: USER-SERVICE
+useSSL: false
+data:
+  exception:
+    message1: User Cannot Register because already exists.

@@ -1,0 +1,112 @@
+version: "3.3"
+services:
+  mysqlservice:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    container_name: mysql
+    networks:
+      - user-cplayerapp-net
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+
+  mongodbservice:
+    image: mongo:latest
+    container_name: mongo
+    networks:
+      - user-cplayerapp-net
+    ports:
+      - "27017:27017"
+
+  eureka-server:
+    container_name: eureka-server
+    build: eurekaserver/
+    networks:
+      - user-cplayerapp-net
+    ports:
+      - "8761:8761"
+    restart: always
+
+  apigateway:
+    container_name: apigateway
+    build: apigateway/
+    networks:
+      - user-cplayerapp-net
+    ports:
+      - "8888:8888"
+    depends_on:
+      - eureka-server
+    environment:
+      - eureka.client.serviceurl.defaultzone=http://eureka-server:8761/eureka
+    restart: always
+
+  user:
+    container_name: user
+    build: user/
+    networks:
+      - user-cplayerapp-net
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+      - mongodbservice
+    restart: always
+
+  userauth:
+    container_name: userauth
+    build: userauth/
+    networks:
+      - user-cplayerapp-net
+    ports:
+      - "8000:8000"
+    depends_on:
+      - eureka-server
+      - mysqlservice
+    restart: always
+
+  favourites:
+    container_name: favourites
+    build: favourites/
+    networks:
+      - user-cplayer-net
+    ports:
+      - "8002:8002"
+    depends_on:
+      - eureka-server
+      - mysqlservice
+    restart: always
+
+  recommended:
+    container_name: recommended
+    build: recommended/
+    networks:
+      - user-cplayerapp-net
+    ports:
+      - "8003:8003"
+    depends_on:
+      - eureka-server
+      - mongodbservice
+    restart: always
+
+  spa:
+    container_name: spa
+    build: spa/
+    networks:
+      - user-cplayerapp-net
+    ports:
+      - "4200:4200"
+
+networks:
+  user-cplayerapp-net:
+    driver: bridge
+
+
+
+
+
+
+
+

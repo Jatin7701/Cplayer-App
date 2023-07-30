@@ -1,0 +1,13 @@
+.mat-dialog-actions {
+    justify-content: flex-end;
+   
+    margin-left:10px;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+td,th{
+    padding: 5px;
+}
